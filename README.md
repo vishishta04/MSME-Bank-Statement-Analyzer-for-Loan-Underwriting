@@ -50,6 +50,7 @@ Modern web browser
 Basic command-line knowledge
 
 
+
 🚀 Installation
 
 1. Clone the repository: 
