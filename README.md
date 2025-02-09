@@ -17,50 +17,38 @@ Downloadable PDF Report (After Clicking 'Download Full PDF')
 
 🌟 Features
 Core Analysis
-
 Transaction pattern analysis
-Monthly credit and debit comparison
+Monthly credit & debit comparison
 Balance trend visualization
-Risk indicator assessment
-Comprehensive PDF report generation
-
+Risk assessment indicators
+PDF report generation
 Financial Metrics
-
-Total credits and debits
-Monthly cash flow analysis
-Average transaction value
-Highest/lowest transaction amounts
+Total credits & debits
+Monthly cash flow insights
+Average & highest/lowest transactions
 Balance fluctuation patterns
-
 Risk Assessment
-
-Negative balance day tracking
-Zero transaction day monitoring
-Monthly spending patterns
+Negative balance tracking
+Zero transaction days monitoring
+Monthly spending trends
 Income stability indicators
-
 Visualization
-
-Interactive monthly comparison charts
-Transaction type distribution pie charts
-Color-coded statistical cards
-Responsive design for all devices
-
+Interactive charts & graphs
+Transaction type distribution
+Color-coded insights
+Fully responsive design
 🛠️ Tech Stack
-
 Backend: Python Flask
 Frontend: HTML, TailwindCSS, Font Awesome
 Data Processing: Pandas
 Visualization: Matplotlib
 PDF Generation: FPDF
-Styling: Custom CSS with gradient effects
-
 📋 Prerequisites
-
-Python 3.8 or higher
+Python 3.8+
 pip (Python package manager)
 Modern web browser
-Basic understanding of command-line operations
+Basic command-line knowledge
+
 
 🚀 Installation
 
