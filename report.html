@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Statement Analysis Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f1c40f;
+            --info-color: #2980b9;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1, h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        h1 {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--light-color);
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            padding: 25px;
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            padding: 25px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-card:hover::before {
+            left: 150%;
+        }
+
+        .stat-card.credit {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .stat-card.debit {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .stat-card.balance {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .stat-card.transactions {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+
+        .stat-card.risk {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.9;
+        }
+
+        .stat-label i {
+            font-size: 1.2rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin: 10px 0;
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .chart-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-3px);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .chart-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 280px;
+            margin: 40px auto;
+            padding: 18px 35px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--info-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .risk-indicators {
+            background-color: #fff9e6;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border: 1px solid rgba(231, 76, 60, 0.1);
+        }
+
+        .risk-indicators h3 {
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-header i {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-file-invoice-dollar"></i> Bank Statement Analysis Report</h1>
+
+        <!-- General Overview Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-chart-line"></i>
+                <h2>General Overview</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card credit">
+                    <div class="stat-label">
+                        <i class="fas fa-rupee-sign"></i>
+                        Total Credit
+                    </div>
+                    <div class="stat-value">₹{{ "{:,.2f}".format(stats.total_credit) }}</div>
+                </div>
+                <div class="stat-card debit">
+                    <div class="stat-label">
+                        <i class="fas fa-rupee-sign"></i>
+                        Total Debit
+                    </div>
+                    <div class="stat-value">₹{{ "{:,.2f}".format(stats.total_debit) }}</div>
+                </div>
+                <div class="stat-card balance">
+                    <div class="stat-label">
+                        <i class="fas fa-wallet"></i>
+                        Closing Balance
+                    </div>
+                    <div class="stat-value">₹{{ "{:,.2f}".format(stats.closing_balance) }}</div>
+                </div>
+                <div class="stat-card transactions">
+                    <div class="stat-label">
+                        <i class="fas fa-exchange-alt"></i>
+                        Total Transactions
+                    </div>
+                    <div class="stat-value">{{ stats.total_transactions }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-chart-pie"></i>
+                <h2>Visual Analysis</h2>
+            </div>
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-title">Monthly Credit & Debit Comparison</div>
+                    <img src="{{ url_for('static', filename='images/monthly_comparison.png') }}" alt="Monthly Comparison">
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Transaction Type Distribution</div>
+                    <img src="{{ url_for('static', filename='images/transaction_distribution.png') }}" alt="Transaction Distribution">
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Analysis Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-chart-bar"></i>
+                <h2>Transaction Analysis</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card transactions">
+                    <div class="stat-label">
+                        <i class="fas fa-list-ol"></i>
+                        Total Transactions
+                    </div>
+                    <div class="stat-value">{{ stats.total_transactions }}</div>
+                </div>
+                <div class="stat-card balance">
+                    <div class="stat-label">
+                        <i class="fas fa-calculator"></i>
+                        Average Transaction
+                    </div>
+                    <div class="stat-value">₹{{ "{:,.2f}".format(stats.avg_transaction) }}</div>
+                </div>
+                <div class="stat-card credit">
+                    <div class="stat-label">
+                        <i class="fas fa-arrow-up"></i>
+                        Largest Credit
+                    </div>
+                    <div class="stat-value">₹{{ "{:,.2f}".format(stats.largest_credit) }}</div>
+                </div>
+                <div class="stat-card debit">
+                    <div class="stat-label">
+                        <i class="fas fa-arrow-down"></i>
+                        Largest Debit
+                    </div>
+                    <div class="stat-value">₹{{ "{:,.2f}".format(stats.largest_debit) }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Trends Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-calendar-alt"></i>
+                <h2>Monthly Trends</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card credit">
+                    <div class="stat-label">
+                        <i class="fas fa-chart-line"></i>
+                        Highest Income Month
+                    </div>
+                    <div class="stat-value">{{ stats.highest_income_month }}</div>
+                </div>
+                <div class="stat-card debit">
+                    <div class="stat-label">
+                        <i class="fas fa-chart-line"></i>
+                        Highest Spending Month
+                    </div>
+                    <div class="stat-value">{{ stats.highest_spending_month }}</div>
+                </div>
+                <div class="stat-card transactions">
+                    <div class="stat-label">
+                        <i class="fas fa-calendar-day"></i>
+                        Busiest Day
+                    </div>
+                    <div class="stat-value">{{ stats.busiest_day }}</div>
+                </div>
+            </div>
+
+            <!-- Risk Indicators -->
+            <div class="risk-indicators">
+                <h3><i class="fas fa-exclamation-triangle"></i> Risk Indicators</h3>
+                <div class="stats-grid">
+                    <div class="stat-card risk">
+                        <div class="stat-label">
+                            <i class="fas fa-minus-circle"></i>
+                            Negative Balance Days
+                        </div>
+                        <div class="stat-value">{{ stats.negative_balance_days }}</div>
+                    </div>
+                    <div class="stat-card risk">
+                        <div class="stat-label">
+                            <i class="fas fa-ban"></i>
+                            Zero Transaction Days
+                        </div>
+                        <div class="stat-value">{{ stats.zero_transaction_days }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ url_for('download_report') }}" class="download-btn">
+            <i class="fas fa-download"></i>
+            Download Full PDF Report
+        </a>
+    </div>
+</body>
+</html>
